@@ -12,8 +12,9 @@ import webpack from "webpack";
 import webpackConfig from "./webpack.conf";
 
 import autoprefixer from "autoprefixer";
-import sass from "gulp-sass";
 import cssNano from "gulp-cssnano";
+import sass from "gulp-sass";
+import sourcemaps from "gulp-sourcemaps";
 
 const browserSync = BrowserSync.create();
 
@@ -44,6 +45,7 @@ gulp.task("css", () => (
 // Compile CSS with SCSS
 gulp.task("css", () => (
   gulp.src("./src/scss/*.scss")
+  .pipe(sourcemaps.init())
     .pipe(sass({
       outputStyle: "nested",
       precision: 10,
@@ -51,6 +53,7 @@ gulp.task("css", () => (
     }))
     .pipe(postcss([autoprefixer()]))
     .pipe(cssNano())
+    .pipe(sourcemaps.write("."))
     .pipe(gulp.dest("./dist/css"))
     .pipe(browserSync.stream())
 ));
